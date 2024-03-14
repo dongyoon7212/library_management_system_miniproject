@@ -1,6 +1,8 @@
 package com.study.library.dto;
 
+import com.study.library.entity.User;
 import lombok.Data;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -18,4 +20,14 @@ public class SignupReqDto {
     @NotBlank
     @Email
     private String email;
+
+    // dto는 bean이 아니기 때문에 service에서 매개변수로 받는다.
+    public User toEntity(BCryptPasswordEncoder passwordEncoder) {
+        return User.builder()
+                .username(username)
+                .password(passwordEncoder.encode(password))
+                .name(name)
+                .email(email)
+                .build();
+    }
 }
