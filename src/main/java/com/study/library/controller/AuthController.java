@@ -33,3 +33,15 @@ public class AuthController {
         return ResponseEntity.created(null).body(true);
     }
 }
+
+
+/*
+회원가입                                                                                          -service
+react -(axios)-> security ------ (json) ->authController(signup)-------|--------@valid체크 후-()-->중복체크 ---(비밀번호 암호화)---------------> service(매개변수passwordEncoder)--(entity)-->DB
+                -permitAll(통과)          -DTO => 정규식 --> @valid(여러곳에서 다쓰임) 그래서 aop           -Bcrypt.encode                        -sql 실패시 롤백(user,role)후 예외처리     -user
+                                                                -->bindingresult                            -sercurityconfig bean 등록(ioc)       -toentity로 객체변환 후 sql                -ROLE
+                                                                -->hasError(t/f)                            -passwordEncoder()
+                                                                -->ErrorMap
+      <------------------------------------------------------------리턴(errorMap)
+      <-------------------------------------------------------------------------------------------중복되면 리턴
+ */
