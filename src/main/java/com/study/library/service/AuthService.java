@@ -59,7 +59,7 @@ public class AuthService {
 
         Authentication authentication = new UsernamePasswordAuthenticationToken(user.toPrincipalUser(), "");
 
-        return jwtProvider.generateToken(null);
+        return jwtProvider.generateToken(authentication);
     }
 
 }
