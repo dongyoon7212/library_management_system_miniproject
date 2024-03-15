@@ -23,11 +23,6 @@ public class AuthController {
     @PostMapping("/signup")
     public ResponseEntity<?> signup(@Valid @RequestBody SignupReqDto signupReqDto, BindingResult bindingResult) { // valid체크 후 오류를 bindingResult로 받아옴
 
-        if(authService.isDuplicatedByUsername(signupReqDto.getUsername())) {
-            ObjectError objectError = new FieldError("username", "username", "이미 존재하는 사용자 이름입니다");
-            bindingResult.addError(objectError);
-        }
-
         authService.signup(signupReqDto);
 
         return ResponseEntity.created(null).body(true);
