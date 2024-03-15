@@ -1,6 +1,7 @@
 package com.study.library.controller;
 
 import com.study.library.aop.annotation.ValidAspect;
+import com.study.library.dto.SigninReqDto;
 import com.study.library.dto.SignupReqDto;
 import com.study.library.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,12 @@ public class AuthController {
         authService.signup(signupReqDto);
 
         return ResponseEntity.created(null).body(true);
+    }
+
+    @PostMapping("/signin")
+    public ResponseEntity<?> signin(@RequestBody SigninReqDto signinReqDto) {
+
+        return ResponseEntity.ok(authService.signin(signinReqDto)); // jwt토큰을 응답으로 줌
     }
 }
 
