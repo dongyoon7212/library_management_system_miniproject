@@ -1,5 +1,6 @@
 package com.study.library.config;
 
+import com.study.library.security.exception.AuthEntryPoint;
 import com.study.library.security.filter.JwtAuthenticationFilter;
 import com.study.library.security.filter.PermitAllFilter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +23,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter { // 2. WebSecu
     @Autowired
     private JwtAuthenticationFilter jwtAuthenticationFilter;
 
+    @Autowired
+    private AuthEntryPoint authEntryPoint;
+
     @Bean
     public BCryptPasswordEncoder passwordEncoder() { //bean 등록
         return new BCryptPasswordEncoder();
@@ -29,7 +33,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter { // 2. WebSecu
 
     @Override
     protected void configure(HttpSecurity http) throws Exception { // 3. HttpSecurity 오버라이드 한다.
-        http.cors();
+        http.cors(); // cross origin 세팅 => WebMvcConfig에 설정한 값을 따라감
         http.csrf().disable(); // csrf(토큰인증방식) 하지만 SSR방식이기때문에 CSR인 프로젝트는 쓰지 않는다. => 기본설정
         http.authorizeRequests()
                 .antMatchers("/server/**", "/auth/**") // 경로 설정
@@ -38,7 +42,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter { // 2. WebSecu
                 .authenticated() // 인증 해야함
                 .and()
                 .addFilterAfter(permitAllFilter, LogoutFilter.class) // LogoutFilter후에 추가
-                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class); // UsernamePasswordAuthenticationFilter 전에 추가
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class) // UsernamePasswordAuthenticationFilter 전에 추가
+                .exceptionHandling()
+                .authenticationEntryPoint(authEntryPoint);
+                //entrypoint가 없으면 403 있으면 401 설정을 해둬야함
 
         // 4. http에 해당 설정을 함
     }

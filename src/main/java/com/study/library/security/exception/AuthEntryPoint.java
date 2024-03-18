@@ -15,8 +15,6 @@ public class AuthEntryPoint implements AuthenticationEntryPoint {
 
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
-
-        response.setStatus(HttpStatus.UNAUTHORIZED.value());
-
+        // 여기서 토큰 만료나 그런것들을 다 처리해야함
     }
 }
