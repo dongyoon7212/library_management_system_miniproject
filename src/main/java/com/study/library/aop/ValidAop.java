@@ -30,7 +30,7 @@ public class ValidAop {
     private void pointCut() {}
 
     @Around("pointCut()")
-    public Object aroud(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
+    public Object around(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
         String methodName = proceedingJoinPoint.getSignature().getName();
 
         Object[] args = proceedingJoinPoint.getArgs();

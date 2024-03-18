@@ -50,16 +50,14 @@ public class AuthService {
     public String signin(SigninReqDto signinReqDto) {
         User user = userMapper.findUserByUsername(signinReqDto.getUsername());
 
-        if(user == null) {
+        if(user == null) { // id가 틀림
             throw new UsernameNotFoundException("사용자 정보를 확인하세요");
         }
-        if (!passwordEncoder.matches(signinReqDto.getPassword(), user.getPassword())) {
+        if (!passwordEncoder.matches(signinReqDto.getPassword(), user.getPassword())) { // 비밀번호가 틀림
             throw new BadCredentialsException("사용자 정보를 확인하세요");
         }
 
-        Authentication authentication = new UsernamePasswordAuthenticationToken(user.toPrincipalUser(), "");
-
-        return jwtProvider.generateToken(authentication);
+        return jwtProvider.generateToken(user);
     }
 
 }

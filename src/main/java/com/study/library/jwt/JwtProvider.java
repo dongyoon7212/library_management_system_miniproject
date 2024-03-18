@@ -1,14 +1,14 @@
 package com.study.library.jwt;
 
-import com.study.library.security.PrincipalUser;
+import com.study.library.entity.User;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import java.security.Key;
 import java.util.Collection;
@@ -23,13 +23,11 @@ public class JwtProvider {
         key = Keys.hmacShaKeyFor(Decoders.BASE64.decode(secret));
     }
 
-    public String generateToken(Authentication authentication) {
+    public String generateToken(User user) {
 
-        PrincipalUser principalUser = (PrincipalUser) authentication.getPrincipal();
-
-        int userId = principalUser.getUserId();
-        String username = principalUser.getUsername();
-        Collection<? extends GrantedAuthority> authorities = principalUser.getAuthorities();
+        int userId = user.getUserId();
+        String username = user.getUsername();
+        Collection<? extends GrantedAuthority> authorities = user.getAuthorities();
         Date expireDate = new Date(new Date().getTime() + (1000 * 60 * 60 *24)); // 만료기간 (현재시간 + 하루)
 
         String accessToken = Jwts.builder() // 토큰을 생성해줌
@@ -41,5 +39,13 @@ public class JwtProvider {
                 .compact();
 
         return accessToken;
+    }
+
+    public String removeBearer(String token) {
+        if(!StringUtils.hasText(token)) {
+            return null;
+        }
+
+        return token.substring("Bearer ".length());
     }
 }
