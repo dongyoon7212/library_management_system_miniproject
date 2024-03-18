@@ -1,6 +1,7 @@
 package com.study.library.config;
 
 import com.study.library.security.filter.JwtAuthenticationFilter;
+import com.study.library.security.filter.PermitAllFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -9,10 +10,14 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.logout.LogoutFilter;
 
 @EnableWebSecurity // 5. 밑의 설정값을 적용
 @Configuration // 1. ioc에 등록하기
 public class SecurityConfig extends WebSecurityConfigurerAdapter { // 2. WebSecurityConfigurerAdapter 상속을 받아온다.
+
+    @Autowired
+    private PermitAllFilter permitAllFilter;
 
     @Autowired
     private JwtAuthenticationFilter jwtAuthenticationFilter;
@@ -32,7 +37,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter { // 2. WebSecu
                 .anyRequest() // 설정한 경로를 제외하고
                 .authenticated() // 인증 해야함
                 .and()
-                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class); // 필터 전처리에 추가
+                .addFilterAfter(permitAllFilter, LogoutFilter.class) // LogoutFilter후에 추가
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class); // UsernamePasswordAuthenticationFilter 전에 추가
 
         // 4. http에 해당 설정을 함
     }

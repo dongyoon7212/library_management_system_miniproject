@@ -1,5 +1,11 @@
 package com.study.library.security.filter;
 
+import com.study.library.jwt.JwtProvider;
+import io.jsonwebtoken.Claims;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.*;
@@ -9,14 +15,36 @@ import java.io.IOException;
 
 @Component
 public class JwtAuthenticationFilter extends GenericFilter {
+
+    @Autowired
+    private JwtProvider jwtProvider;
+
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         HttpServletResponse response = (HttpServletResponse) servletResponse;
 
-        String accessToken = request.getHeader("Authorization"); // 헤더에 있는 accessToken
-        System.out.println(accessToken);
+        Boolean isPermitAll = (Boolean) request.getAttribute("isPermitAll");
 
+        if(!isPermitAll) {
+            String accessToken = request.getHeader("Authorization"); // 헤더에 있는 accessToken
+            String removedBearerToken = jwtProvider.removeBearer(accessToken);
+            Claims claims = jwtProvider.getClaims(removedBearerToken);
+            if(claims == null) {
+                //response.sendError(HttpServletResponse.SC_UNAUTHORIZED); // 401에러 인증실패
+                response.sendError(HttpStatus.UNAUTHORIZED.value()); // 401에러 인증실패
+                return;
+            }
+
+            Authentication authentication = jwtProvider.getAuthentication(claims);
+
+            if(authentication == null) {
+                response.sendError(HttpStatus.UNAUTHORIZED.value()); // 401에러 인증실패
+                return;
+            }
+
+            SecurityContextHolder.getContext().setAuthentication(authentication); // authentication가 null이면 403 (인증안됨), authentication가 들어간다면 인증완료
+        }
 
         // 전처리
         filterChain.doFilter(request, response);

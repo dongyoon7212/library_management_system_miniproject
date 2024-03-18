@@ -12,6 +12,6 @@ public class AccountController {
     @GetMapping("/principal")
     public ResponseEntity<?> getPrincipal() {
 
-        return ResponseEntity.of(null);
+        return ResponseEntity.ok(null);
     }
 }
