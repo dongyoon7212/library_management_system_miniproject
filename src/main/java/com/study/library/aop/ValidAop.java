@@ -56,7 +56,6 @@ public class ValidAop {
             if(userMapper.findUserByUsername(signupReqDto.getUsername()) != null){
                 ObjectError objectError = new FieldError("username", "username", "이미 존재하는 사용자이름 입니다.");
                 bindingResult.addError(objectError);
-                System.out.println(bindingResult);
             }
         }
 
