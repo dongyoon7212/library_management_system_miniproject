@@ -92,6 +92,7 @@ public class AccountMailService {
             userMapper.saveRole(userId, 2);
 
             resultMap = Map.of("status", true, "message", "인증 완료되었습니다.");
+
         } catch (ExpiredJwtException e) {
             resultMap = Map.of("status", false, "message", "인증 시간이 만료된 요청입니다. \n 인증 메일을 다시 요청 하세요.");
         } catch (JwtException e) {
