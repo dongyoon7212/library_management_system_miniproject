@@ -1,13 +1,12 @@
 package com.study.library.service;
 
+import com.study.library.entity.RoleRegister;
 import com.study.library.jwt.JwtProvider;
 import com.study.library.repository.UserMapper;
 import com.study.library.security.PrincipalUser;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;
-import io.jsonwebtoken.MalformedJwtException;
-import io.jsonwebtoken.security.SignatureException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -89,9 +88,13 @@ public class AccountMailService {
         try {
             claims = jwtProvider.getClaims(token);
             int userId = Integer.parseInt(claims.get("userId").toString());
-            userMapper.saveRole(userId, 2);
-
-            resultMap = Map.of("status", true, "message", "인증 완료되었습니다.");
+            RoleRegister roleRegister = userMapper.findRoleRegisterByUserIdAndRoleId(userId, 2);
+            if(roleRegister != null) {
+                resultMap = Map.of("status", true, "message", "이미 인증 완료된 메일입니다.");
+            } else {
+                userMapper.saveRole(userId, 2);
+                resultMap = Map.of("status", true, "message", "인증 완료되었습니다.");
+            }
 
         } catch (ExpiredJwtException e) {
             resultMap = Map.of("status", false, "message", "인증 시간이 만료된 요청입니다. \n 인증 메일을 다시 요청 하세요.");
