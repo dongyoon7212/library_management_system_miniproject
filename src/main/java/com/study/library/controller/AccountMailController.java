@@ -22,7 +22,7 @@ public class AccountMailController {
 
     @GetMapping("/authenticate")
     public String resultPage(@RequestParam String authToken) {
-
+        System.out.println(authToken);
         return "result_page";
     }
 }

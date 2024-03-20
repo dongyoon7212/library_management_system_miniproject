@@ -65,15 +65,11 @@ public class JwtProvider {
     public Claims getClaims(String token) {
         Claims claims = null;
 
-        try {
-            claims = Jwts.parserBuilder()
-                    .setSigningKey(key)
-                    .build() // key를 통해 토큰 해석
-                    .parseClaimsJws(token)
-                    .getBody();
-        } catch (Exception e) { // 토큰이 위조나 만료되었을 경우 예외 처리
-            log.error("JWT 인증오류: {}", e.getMessage());
-        }
+        claims = Jwts.parserBuilder()
+                .setSigningKey(key)
+                .build() // key를 통해 토큰 해석
+                .parseClaimsJws(token)
+                .getBody();
 
         return claims;
     }
@@ -91,10 +87,11 @@ public class JwtProvider {
         // Authentication으로 업케스팅 되서 리턴
     }
 
-    public String generateAuthMailToken(String toMailAddress) {
+    public String generateAuthMailToken(int userId, String toMailAddress) {
         Date expireDate = new Date(new Date().getTime() + (1000 * 60 * 5));
 
         return Jwts.builder()
+                .claim("userId", userId)
                 .claim("toMailAddress", toMailAddress)
                 .setExpiration(expireDate)
                 .signWith(key, SignatureAlgorithm.HS256)
