@@ -1,6 +1,7 @@
 package com.study.library.service;
 
 import com.study.library.jwt.JwtProvider;
+import com.study.library.repository.UserMapper;
 import com.study.library.security.PrincipalUser;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -27,6 +28,9 @@ public class AccountMailService {
 
     @Autowired
     private JwtProvider jwtProvider;
+
+    @Autowired
+    private UserMapper userMapper;
 
     @Value("${spring.mail.address}")
     private String fromMailAddress;
@@ -73,9 +77,9 @@ public class AccountMailService {
 
         return result;
     }
-    public Map<String, String> authenticate(String token) {
+    public Map<String, Object> authenticate(String token) {
         Claims claims = null;
-        Map<String, String> resultMap = null;
+        Map<String, Object> resultMap = null;
 
         // ExpiredJwtException => 토큰 유효기간 만료
         // MalformedJwtException => 위조, 변조
@@ -84,14 +88,14 @@ public class AccountMailService {
 
         try {
             claims = jwtProvider.getClaims(token);
-        } catch (IllegalArgumentException | SignatureException e) {
-            resultMap = Map.of("message", "잘못된 요청입니다.");
-        } catch (MalformedJwtException e) {
-            resultMap = Map.of("message", "인증 메일을 다시 요청하세요.");
+            int userId = Integer.parseInt(claims.get("userId").toString());
+            userMapper.saveRole(userId, 2);
+
+            resultMap = Map.of("status", true, "message", "인증 완료되었습니다.");
         } catch (ExpiredJwtException e) {
-            resultMap = Map.of("message", "인증 시간이 만료된 요청입니다.");
+            resultMap = Map.of("status", false, "message", "인증 시간이 만료된 요청입니다. \n 인증 메일을 다시 요청 하세요.");
         } catch (JwtException e) {
-            resultMap = Map.of("message", "인증 메일을 다시 요청 하세요.");
+            resultMap = Map.of("status", false, "message", "잘못된 접근입니다. \n 인증 메일을 다시 요청 하세요.");
         }
 
         return resultMap;

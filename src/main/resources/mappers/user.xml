@@ -43,10 +43,10 @@
             (0, #{username}, #{password}, #{name}, #{email}, now(), now())
     </insert>
 
-    <insert id="saveRole" parameterType="integer">
+    <insert id="saveRole">
         insert into
             role_register_tb
-        values(0, #{userId}, 1, now(), now())
+        values(0, #{userId}, #{roleId}, now(), now())
     </insert>
 
     <select id="findUserByUsername" parameterType="string" resultMap="UserResultMap">

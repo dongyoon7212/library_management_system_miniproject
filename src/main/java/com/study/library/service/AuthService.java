@@ -40,7 +40,7 @@ public class AuthService {
         User user = signupReqDto.toEntity(passwordEncoder);
 
         successCount += userMapper.saveUser(user);
-        successCount += userMapper.saveRole(user.getUserId());
+        successCount += userMapper.saveRole(user.getUserId(), 1); // 1 => 임시계정
 
         if(successCount < 2) { // 두개 중 하나라도 실패하면 예외처리
             throw new SaveException(); // 런타임 예외 -> 롤백
