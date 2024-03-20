@@ -90,4 +90,14 @@ public class JwtProvider {
         return new UsernamePasswordAuthenticationToken(principalUser, principalUser.getPassword(), principalUser.getAuthorities()); //password는 앞에서 검증이 되었기 때문에 비어있어도 된다.
         // Authentication으로 업케스팅 되서 리턴
     }
+
+    public String generateAuthMailToken(String toMailAddress) {
+        Date expireDate = new Date(new Date().getTime() + (1000 * 60 * 5));
+
+        return Jwts.builder()
+                .claim("toMailAddress", toMailAddress)
+                .setExpiration(expireDate)
+                .signWith(key, SignatureAlgorithm.HS256)
+                .compact();
+    }
 }

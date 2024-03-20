@@ -38,6 +38,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter { // 2. WebSecu
         http.authorizeRequests()
                 .antMatchers("/server/**", "/auth/**") // 경로 설정
                 .permitAll() // 모두 허용
+                .antMatchers("/mail/authenticate")
+                .permitAll()
                 .anyRequest() // 설정한 경로를 제외하고
                 .authenticated() // 인증 해야함
                 .and()
