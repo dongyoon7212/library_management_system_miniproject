@@ -19,8 +19,11 @@
 <!--        1개-->
     </resultMap>
 
-    <resultMap id="OAuth2ResultMap" type="">
-
+    <resultMap id="OAuth2ResultMap" type="com.study.library.entity.OAuth2">
+        <id property="oAuth2Id" column="oauth2_id" />
+        <result property="oAuth2name" column="oauth2_name" />
+        <result property="userId" column="user_id" />
+        <result property="providerName" column="provider_name" />
     </resultMap>
 
     <resultMap id="UserResultMap" type="com.study.library.entity.User">
@@ -32,6 +35,7 @@
         <result property="createDate" column="create_date" />
         <result property="updateDate" column="update_date" />
         <collection property="roleRegisters" javaType="list" resultMap="RoleRegisterResultMap" />
+        <collection property="oAuth2s" javaType="List" resultMap="OAuth2ResultMap" />
 <!--        다수-->
     </resultMap>
 
@@ -82,7 +86,7 @@
             rrt.role_register_id,
             rrt.role_id,
             rt.role_name,
-            rt.role_name_kor
+            rt.role_name_kor,
             oat.oauth2_id,
             oat.oauth2_name,
             oat.provider_name
@@ -107,7 +111,7 @@
             rrt.role_register_id,
             rrt.role_id,
             rt.role_name,
-            rt.role_name_kor
+            rt.role_name_kor,
             oat.oauth2_id,
             oat.oauth2_name,
             oat.provider_name
@@ -116,6 +120,8 @@
             left outer join role_register_tb rrt on(rrt.user_id = ut.user_id)
             left outer join role_tb rt on(rt.role_id = rrt.role_id)
             left outer join oauth2_tb oat on(oat.user_id = ut.user_id)
+        where
+            oat.oauth2_name = #{oAuth2Name}
     </select>
 
 </mapper>
