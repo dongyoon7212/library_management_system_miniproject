@@ -21,7 +21,7 @@
 
     <resultMap id="OAuth2ResultMap" type="com.study.library.entity.OAuth2">
         <id property="oAuth2Id" column="oauth2_id" />
-        <result property="oAuth2name" column="oauth2_name" />
+        <result property="oAuth2Name" column="oauth2_name" />
         <result property="userId" column="user_id" />
         <result property="providerName" column="provider_name" />
     </resultMap>
@@ -123,5 +123,10 @@
         where
             oat.oauth2_name = #{oAuth2Name}
     </select>
+
+    <insert id="saveOAuth2" parameterType="com.study.library.entity.OAuth2">
+        insert into oauth2_tb
+        values(0, #{oAuth2Name}, #{userId}, #{providerName}, now(), now())
+    </insert>
 
 </mapper>

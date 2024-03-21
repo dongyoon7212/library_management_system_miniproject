@@ -1,6 +1,7 @@
 package com.study.library.controller;
 
 import com.study.library.aop.annotation.ValidAspect;
+import com.study.library.dto.OAuth2SignupReqDto;
 import com.study.library.dto.SigninReqDto;
 import com.study.library.dto.SignupReqDto;
 import com.study.library.service.AuthService;
@@ -23,6 +24,15 @@ public class AuthController {
     public ResponseEntity<?> signup(@Valid @RequestBody SignupReqDto signupReqDto, BindingResult bindingResult) { // valid체크 후 오류를 bindingResult로 받아옴
 
         authService.signup(signupReqDto);
+
+        return ResponseEntity.created(null).body(true);
+    }
+
+    @ValidAspect
+    @PostMapping("/oauth2/signup")
+    public ResponseEntity<?> oAuth2Signup(@Valid @RequestBody OAuth2SignupReqDto oAuth2SignupReqDto, BindingResult bindingResult) { // valid체크 후 오류를 bindingResult로 받아옴
+
+        authService.oAuth2Signup(oAuth2SignupReqDto);
 
         return ResponseEntity.created(null).body(true);
     }

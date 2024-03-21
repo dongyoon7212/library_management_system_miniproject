@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @Data
 public class OAuth2 {
     private int oAuth2Id;
-    private String oAuth2name;
+    private String oAuth2Name;
     private int userId;
     private String providerName;
     private LocalDateTime createDate;

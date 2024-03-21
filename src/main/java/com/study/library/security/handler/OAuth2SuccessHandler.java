@@ -17,18 +17,16 @@ import java.io.IOException;
 @Component
 public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
 
-    @Value("${server.deploy-address}")
-    private String serverAddress;
-    @Value("${server.port}")
-    private String port;
+    @Value("${client.deploy-address}")
+    private String clientAddress;
 
     @Autowired
     private UserMapper userMapper;
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
-        String name = authentication.getName();
-        User user = userMapper.findUserByOAuth2name(name);
+        String name = authentication.getName(); // id값
+        User user = userMapper.findUserByOAuth2name(name); // 해당 id를 가지고 있는 유저정보 검색
 
         // OAuth2 로그인을 통해 회원가입이 되어있지 않은 상태 (연동이 된적이 없는 경우)
         // OAuth2 동기화
@@ -36,7 +34,7 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
             DefaultOAuth2User oAuth2User = (DefaultOAuth2User) authentication.getPrincipal();
             String providerName = oAuth2User.getAttribute("provider").toString();
 
-            response.sendRedirect("http://" + serverAddress + ":" + port + "/");
+            response.sendRedirect("http://" + clientAddress + "/auth/oauth2?name=" + name + "&provider=" + providerName);
             return;
         }
 
