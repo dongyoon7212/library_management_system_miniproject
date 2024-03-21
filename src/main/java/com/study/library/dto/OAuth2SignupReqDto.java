@@ -23,7 +23,7 @@ public class OAuth2SignupReqDto {
     private String email;
 
     @NotBlank
-    private String oAuth2Name;
+    private String oauth2Name;
     @NotBlank
     private String providerName;
 
@@ -39,7 +39,7 @@ public class OAuth2SignupReqDto {
 
     public OAuth2 toOAuth2Entity(int userId) {
         return OAuth2.builder()
-                .oAuth2Name(oAuth2Name)
+                .oAuth2Name(oauth2Name)
                 .userId(userId)
                 .providerName(providerName)
                 .build();

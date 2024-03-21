@@ -1,5 +1,6 @@
 package com.study.library.controller;
 
+import com.study.library.aop.annotation.ParamsPrintAspect;
 import com.study.library.aop.annotation.ValidAspect;
 import com.study.library.dto.OAuth2SignupReqDto;
 import com.study.library.dto.SigninReqDto;
@@ -29,6 +30,7 @@ public class AuthController {
     }
 
     @ValidAspect
+    @ParamsPrintAspect
     @PostMapping("/oauth2/signup")
     public ResponseEntity<?> oAuth2Signup(@Valid @RequestBody OAuth2SignupReqDto oAuth2SignupReqDto, BindingResult bindingResult) { // valid체크 후 오류를 bindingResult로 받아옴
 
