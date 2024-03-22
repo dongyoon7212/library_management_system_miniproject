@@ -29,6 +29,6 @@ public class AccountController {
     @PutMapping("/password")
     public ResponseEntity<?> editPassword(@RequestBody EditPasswordReqDto editPasswordReqDto, BindingResult bindingResult) {
         accountService.editPassword(editPasswordReqDto);
-        return ResponseEntity.ok("");
+        return ResponseEntity.ok(true);
     }
 }
