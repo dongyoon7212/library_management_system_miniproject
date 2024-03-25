@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @Data
 public class Category {
     private int categoryId;
-    private int categoryName;
+    private String categoryName;
     private LocalDateTime createDate;
     private LocalDateTime updateDate;
 }

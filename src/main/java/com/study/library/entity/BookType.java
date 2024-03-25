@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Data
 public class BookType {
-    private int bookTpyeId;
+    private int bookTypeId;
     private String bookTypeName;
     private LocalDateTime createDate;
     private LocalDateTime updateDate;

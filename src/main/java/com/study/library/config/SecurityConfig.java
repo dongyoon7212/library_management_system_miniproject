@@ -48,6 +48,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter { // 2. WebSecu
                 .permitAll() // 모두 허용
                 .antMatchers("/mail/authenticate")
                 .permitAll()
+                .antMatchers("/admin/**")
+                .hasRole("ADMIN")
                 .anyRequest() // 설정한 경로를 제외하고
                 .authenticated() // 인증 해야함
                 .and()
