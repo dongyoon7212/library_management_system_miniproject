@@ -7,10 +7,7 @@ import com.study.library.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -28,5 +25,11 @@ public class AdminBookController {
         bookService.saveBook(registerBookReqDto);
 
         return ResponseEntity.created(null).body(true);
+    }
+
+    @GetMapping("/books")
+    public ResponseEntity<?> searchBooks() {
+
+        return ResponseEntity.ok().body(null);
     }
 }
