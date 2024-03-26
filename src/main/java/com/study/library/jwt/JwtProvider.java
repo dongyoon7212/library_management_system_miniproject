@@ -41,7 +41,7 @@ public class JwtProvider {
         int userId = user.getUserId();
         String username = user.getUsername();
         Collection<? extends GrantedAuthority> authorities = user.getAuthorities();
-        Date expireDate = new Date(new Date().getTime() + (1000 * 60 * 60 *24)); // 만료기간 (현재시간 + 하루)
+        Date expireDate = new Date(new Date().getTime() + (1000 * 60 * 60 * 24 * 20)); // 만료기간 (현재시간 + 하루)
 
         String accessToken = Jwts.builder() // 토큰을 생성해줌
                 .claim("userId", userId) // json형식으로 k,v로 들어감

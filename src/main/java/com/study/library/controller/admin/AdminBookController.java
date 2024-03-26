@@ -3,6 +3,7 @@ package com.study.library.controller.admin;
 import com.study.library.aop.annotation.ParamsPrintAspect;
 import com.study.library.aop.annotation.ValidAspect;
 import com.study.library.dto.RegisterBookReqDto;
+import com.study.library.dto.SearchBookReqDto;
 import com.study.library.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -27,9 +28,9 @@ public class AdminBookController {
         return ResponseEntity.created(null).body(true);
     }
 
+    @ParamsPrintAspect
     @GetMapping("/books")
-    public ResponseEntity<?> searchBooks() {
-
-        return ResponseEntity.ok().body(null);
+    public ResponseEntity<?> searchBooks(SearchBookReqDto searchBookReqDto) {
+        return ResponseEntity.ok(bookService.searchBooks(searchBookReqDto));
     }
 }
