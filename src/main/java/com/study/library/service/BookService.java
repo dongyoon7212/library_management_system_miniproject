@@ -53,4 +53,9 @@ public class BookService {
                 .maxPageNumber(maxPageNumber)
                 .build();
     }
+
+    @Transactional(rollbackFor = Exception.class)
+    public void deleteBooks(List<Integer> bookIds) {
+        bookMapper.deleteBooksByBookIds(bookIds);
+    }
 }

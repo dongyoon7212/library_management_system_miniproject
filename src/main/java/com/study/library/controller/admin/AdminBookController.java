@@ -11,6 +11,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequestMapping("/admin")
@@ -28,7 +29,6 @@ public class AdminBookController {
         return ResponseEntity.created(null).body(true);
     }
 
-    @ParamsPrintAspect
     @GetMapping("/books")
     public ResponseEntity<?> searchBooks(SearchBookReqDto searchBookReqDto) {
         return ResponseEntity.ok(bookService.searchBooks(searchBookReqDto));
@@ -37,5 +37,17 @@ public class AdminBookController {
     @GetMapping("/books/count")
     public ResponseEntity<?> getCount(SearchBookReqDto searchBookReqDto) {
         return ResponseEntity.ok(bookService.getBookCount(searchBookReqDto));
+    }
+
+    @DeleteMapping("/book/{bookId}")
+    public ResponseEntity<?> deleteBook(@PathVariable int bookId) {
+        return ResponseEntity.ok(null);
+    }
+
+    @ParamsPrintAspect
+    @DeleteMapping("/books")
+    public ResponseEntity<?> deleteBooks(@RequestBody List<Integer> bookIds) {
+        bookService.deleteBooks(bookIds);
+        return ResponseEntity.ok(null);
     }
 }
