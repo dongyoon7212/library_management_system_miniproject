@@ -48,6 +48,6 @@ public class AdminBookController {
     @DeleteMapping("/books")
     public ResponseEntity<?> deleteBooks(@RequestBody List<Integer> bookIds) {
         bookService.deleteBooks(bookIds);
-        return ResponseEntity.ok(null);
+        return ResponseEntity.ok(true);
     }
 }
