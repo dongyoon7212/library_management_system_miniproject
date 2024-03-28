@@ -4,6 +4,7 @@ import com.study.library.aop.annotation.ParamsPrintAspect;
 import com.study.library.aop.annotation.ValidAspect;
 import com.study.library.dto.RegisterBookReqDto;
 import com.study.library.dto.SearchBookReqDto;
+import com.study.library.dto.UpdateBookReqDto;
 import com.study.library.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -48,6 +49,12 @@ public class AdminBookController {
     @DeleteMapping("/books")
     public ResponseEntity<?> deleteBooks(@RequestBody List<Integer> bookIds) {
         bookService.deleteBooks(bookIds);
+        return ResponseEntity.ok(true);
+    }
+
+    @PutMapping("/book/{bookId}")
+    public ResponseEntity<?> updateBook(@PathVariable int bookId, @RequestBody UpdateBookReqDto updateBookReqDto){
+        bookService.updateBook(updateBookReqDto);
         return ResponseEntity.ok(true);
     }
 }
